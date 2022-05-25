@@ -106,7 +106,7 @@ class _workingwithformState extends State<workingwithform> {
     // return Scaffold(
     //   body: Column(
     //     mainAxisAlignment: MainAxisAlignment.start,
-    //     children: [
+    //     trchildren: [
     //       SizedBox(height: 200,),
     //       Container(child: Text("Sign in",style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),textAlign: TextAlign.left,)),
     //       Text("text"),
