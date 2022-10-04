@@ -128,8 +128,10 @@
 
 import 'dart:async';
 import 'dart:convert' show json;
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -138,6 +140,7 @@ import 'package:warehouse/custom.dart';
 import 'package:warehouse/forming.dart';
 import 'package:warehouse/sub.dart';
 import 'package:warehouse/welcome.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 // GoogleSignIn _googleSignIn = GoogleSignIn(
 //   // Optional clientId
@@ -148,8 +151,60 @@ import 'package:warehouse/welcome.dart';
 //   ],
 // );
 
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   await Firebase.initializeApp();
+//   print('Handling a background message ${message.messageId}');
+//   print(message.data);
+//   flutterLocalNotificationsPlugin.show(
+//       message.data.hashCode,
+//       message.data['title'],
+//       message.data['body'],
+//       NotificationDetails(
+//         android: AndroidNotificationDetails(
+//           channel.id,
+//           channel.name,
+//         ),
+//       ));
+// }
+
+// const AndroidNotificationChannel channel = AndroidNotificationChannel(
+//   'high_importance_channel', // id
+//   'High Importance Notifications', // title
+//   description: 'This channel is used for important notifications.', // description
+//   importance: Importance.high,
+// );
+
+// final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+    // print("calling from main");
+    // print('Got a message whilst in the foreground!');
+    // print('Message data: ${message.data}');
+    // var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+    //   'Flutter chat demo',
+    //   'your channel description',
+    //   playSound: true,
+    //   enableVibration: true,
+    //   priority: Priority.high,
+    // );
+    // var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+    // print("i am called");
+    // var platformChannelSpecifics =
+    //     NotificationDetails(android: androidPlatformChannelSpecifics);
+    // if (message.notification != null) {
+    //   print(
+    //       'Message also contained a notification: ${message.notification?.title}');
+    //   await FlutterLocalNotificationsPlugin().show(
+    //     0,
+    //     message.notification?.title.toString(),
+    //     message.notification?.body.toString(),
+    //     platformChannelSpecifics,
+    //   );
+    // }
+  
   await Firebase.initializeApp();
   bool s2 = false;
   print("yes");
@@ -161,6 +216,16 @@ Future<void> main() async {
   }
   print(s2);
   print(s);
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // await flutterLocalNotificationsPlugin
+  //     .resolvePlatformSpecificImplementation<
+  //         AndroidFlutterLocalNotificationsPlugin>()
+  //     ?.createNotificationChannel(channel);
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,

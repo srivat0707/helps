@@ -64,7 +64,7 @@ class _otpingState extends State<otping> {
             .getInstance(); // Save an String value to 'action' key.
         await prefs.setString('useraction', ans.toString());
         final uuuid = await FirebaseMessaging.instance.getToken();
-        print("uuuuid");
+        print("\n\n\n\n\nuuuid\n\n\n\n\n");
         print(uuuid);
         if (t.additionalUserInfo?.isNewUser == false) {
         } else {
@@ -73,6 +73,7 @@ class _otpingState extends State<otping> {
             "image":
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRROuxtDXBOoxjAx8VrtoPF_9y_YJIOuPDzdQ&usqp=CAU",
             "uid": ans,
+            "fcm":uuuid,
             "online": 1,
           });
           print("done");
@@ -82,212 +83,206 @@ class _otpingState extends State<otping> {
             new MaterialPageRoute(builder: (ctx) => welcoming(ans)));
       }
     }
-
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-            // Box decoration takes a gradient
-            gradient: LinearGradient(
-          // Where the linear gradient begins and ends
-          // begin: Alignment.topRight,
-          // end: Alignment.bottomLeft,
-          // Add one stop for each color. Stops should increase from 0 to 1
-          // stops: [0.1, 0.5, 0.7, 0.9],
-          colors: [
-            Color.fromARGB(0, 244, 205, 239),
-            Color.fromARGB(255, 209, 250, 232),
-            // Color.fromARGB(255, 118, 125, 170),
-            // Color.fromARGB(255, 221, 241, 168),
-          ],
-        )),
-        child: is_loading
-            ? Center(
-                child: Lottie.network(
-                    "https://assets9.lottiefiles.com/private_files/lf30_ptsrzumi.json"),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 200,
-                  ),
-                  Container(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.start,
+    return Scaffold(body: Stack(
+        children: <Widget>[
+          Container(
+            decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    fit: BoxFit.cover,
+                    image: new NetworkImage(
+                        'https://i.pinimg.com/originals/c2/47/e9/c247e913a0214313045a8a5c39f8522b.jpg'))),
+          ),
+          SingleChildScrollView(
+              child: is_loading
+                  ? Center(
+                      child: Lottie.network(
+                          "https://assets9.lottiefiles.com/private_files/lf30_ptsrzumi.json"),
+                    )
+                  : Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: Text(
-                            "Enter OTP",
-                            style: TextStyle(
-                                fontSize: 30, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 18.0, right: 18.0, bottom: 18.0),
-                          child: Container(
-                            child: Text(
-                                "Enter the otp correctly to login and avoid app crashes"),
-                            width: 250,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Center(
-                      child: Container(
-                          width: 380,
+                        SizedBox(
                           height: 200,
-                          padding: EdgeInsets.all(5.0),
-                          child: Form(
-                              child: Row(
+                        ),
+                        Container(
+                          child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t1,
-                                  onChanged: (x) {
-                                    FocusScope.of(context).nextFocus();
-                                  },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
+                              Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Text(
+                                  "Enter OTP",
+                                  style: TextStyle(
+                                      fontSize: 30, fontWeight: FontWeight.bold,color: Colors.white),
+                                  textAlign: TextAlign.left,
                                 ),
-                                height: 80,
-                                width: 60,
                               ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t2,
-                                  onChanged: (x) {
-                                    FocusScope.of(context).nextFocus();
-                                  },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 18.0, right: 18.0, bottom: 18.0),
+                                child: Container(
+                                  child: Text(
+                                      "Enter the otp correctly to login and avoid app crashes",style: TextStyle(color: Colors.white),),
+                                  width: 250,
                                 ),
-                                height: 80,
-                                width: 60,
-                              ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t3,
-                                  onChanged: (x) {
-                                    FocusScope.of(context).nextFocus();
-                                  },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
-                                ),
-                                height: 80,
-                                width: 60,
-                              ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t4,
-                                  onChanged: (x) {
-                                    FocusScope.of(context).nextFocus();
-                                  },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
-                                ),
-                                height: 80,
-                                width: 60,
-                              ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t5,
-                                  onChanged: (x) {
-                                    FocusScope.of(context).nextFocus();
-                                  },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
-                                ),
-                                height: 80,
-                                width: 60,
-                              ),
-                              SizedBox(
-                                child: TextFormField(
-                                  controller: t6,
-                                  // onChanged: (x) {
-                                  //   FocusScope.of(context).nextFocus();
-                                  // },
-                                  // maxLength: 1,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.phone,
-                                  inputFormatters: [
-                                    LengthLimitingTextInputFormatter(1),
-                                  ],
-                                  textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0))),
-                                ),
-                                height: 80,
-                                width: 60,
                               ),
                             ],
-                          ))),
+                          ),
+                        ),
+                        Container(
+                          child: Center(
+                            child: Container(
+                                width: 380,
+                                height: 200,
+                                padding: EdgeInsets.all(5.0),
+                                child: Form(
+                                    child: Row(
+                                  children: [
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t1,
+                                        onChanged: (x) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t2,
+                                        onChanged: (x) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t3,
+                                        onChanged: (x) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t4,
+                                        onChanged: (x) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t5,
+                                        onChanged: (x) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                    SizedBox(
+                                      child: TextFormField(
+                                        controller: t6,
+                                        // onChanged: (x) {
+                                        //   FocusScope.of(context).nextFocus();
+                                        // },
+                                        // maxLength: 1,
+                                        autofocus: true,
+                                        keyboardType: TextInputType.phone,
+                                        inputFormatters: [
+                                          LengthLimitingTextInputFormatter(1),
+                                        ],
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(18.0))),
+                                      ),
+                                      height: 80,
+                                      width: 60,
+                                    ),
+                                  ],
+                                ))),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  sending();
+                                },
+                                child: Text("submit")),
+                          ],
+                        )
+                      ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                          onPressed: () {
-                            sending();
-                          },
-                          child: Text("submit")),
-                    ],
-                  )
-                ],
-              ),
+            ),
+        ],
       ),
     );
   }

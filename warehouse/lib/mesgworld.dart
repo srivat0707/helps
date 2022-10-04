@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:warehouse/custom.dart';
+import 'package:http/http.dart' as http;
 
 class screeen extends StatefulWidget {
   String? imaging;
@@ -10,9 +13,11 @@ class screeen extends StatefulWidget {
   String? pid;
   String? iid;
   String? db;
-  screeen(String imaging, String name, String pid, String iid) {
+  String? fcm;
+  screeen(String fcm,String imaging, String name, String pid, String iid) {
     this.imaging = imaging;
     this.name = name;
+    this.fcm = fcm;
     this.pid = pid;
     this.iid = iid;
     print("inside constructor");
@@ -195,6 +200,23 @@ class _screeenState extends State<screeen> {
                         "time": Timestamp.now(),
                         "userid": usr
                       });
+                      var url =
+                          Uri.parse("https://fcm.googleapis.com/fcm/send");
+                      var response = await http.post(url,
+                          body: jsonEncode({
+                            'notification': {
+                              'title': 'Sending push form python script',
+                              'body': 'New Message'
+                            },
+                            'to': widget.fcm,
+                            'priority': 'high',
+                          }),
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'key=' +
+                                "AAAAkM4LZUA:APA91bEJM9aM7NgkRmTMVmYax7dWyAOPDri_aKvW_9H_-tfvG4S9Vh7V5HgOA-pXB3akTNVVabE6qGuQ1H1pRH0jGkJYRDrTx4LxVTxEIFr7qemFUmkckEFM6G8cwTu_F9LsYXLtuF5b",
+                          });
+                      print('Response status: ${response.statusCode}');
                       tc.clear();
                     }
                   },

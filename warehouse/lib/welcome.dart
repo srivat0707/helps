@@ -1,11 +1,44 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:warehouse/mesgworld.dart';
+
 // import 'package:warehouse/newpage.dart';
+void configLocalNotification() {
+  var initializationSettingsAndroid = new AndroidInitializationSettings("");
+  var initializationSettingsIOS = new IOSInitializationSettings();
+}
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+void showNotification(message) async {
+  print("1");
+  print(message.notification.title);
+  print("2");
+  var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+      'Flutter chat demo', 'your channel description',
+      playSound: true,
+      enableVibration: true,
+      priority: Priority.high,
+      icon: '@mipmap/ic_launcher');
+  var iOSPlatformChannelSpecifics = new IOSNotificationDetails();
+  print("i am called");
+  var platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    message.notification?.title.toString(),
+    message.notification?.body.toString(),
+    platformChannelSpecifics,
+  );
+}
 
 class welcoming extends StatefulWidget {
   String? uuis;
@@ -34,6 +67,12 @@ class _welcomingState extends State<welcoming> with WidgetsBindingObserver {
   // }
   @override
   void initState() {
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'high_importance_channel', // id
+  'High Importance Notifications', // title
+  description: 'This channel is used for important notifications.', // description
+  importance: Importance.high,
+);
     print(" \n\n\n\ncooking\n\n\n");
     WidgetsBinding.instance?.addObserver(this);
     print("added");
@@ -42,6 +81,72 @@ class _welcomingState extends State<welcoming> with WidgetsBindingObserver {
         .doc(widget.uuis)
         .update({"online": 1});
     print(s);
+    // var initialzationSettingsAndroid =
+    //     AndroidInitializationSettings('@mipmap/ic_launcher');
+    // var initializationSettings =
+    //     InitializationSettings(android: initialzationSettingsAndroid);
+    // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    //   'high_importance_channel', // id
+    //   'High Importance Notifications', // title
+    //   description:
+    //       'This channel is used for important notifications.', // description
+    //   importance: Importance.high,
+    // );
+    var initialzationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettings =
+        InitializationSettings(android: initialzationSettingsAndroid);
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                icon: android.smallIcon,
+              ),
+            ));
+      }
+    });
+    // const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    //     'high_importance_channel', // id
+    //     'High Importance Notifications', // title
+    //     description:
+    //         'This channel is used for important notifications.', // description
+    //     importance: Importance.high,
+    //     playSound: true);
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+    FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    _firebaseMessaging.getToken().then((String? token) {
+      assert(token != null);
+    });
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   _firebaseMessaging.getToken();
+    //   print('Got a message whilst in the foreground!');
+    //   print('Message data: ${message.notification}');
+
+    //   if (message.notification != null) {
+    //     print('Message also contained a notification: ${message.notification}');
+    //   }
+    // });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      showNotification(message);
+    });
     super.initState();
   }
 
@@ -157,7 +262,11 @@ class _welcomingState extends State<welcoming> with WidgetsBindingObserver {
                                 Navigator.of(context).push(
                                     new MaterialPageRoute(
                                         builder: (ctx) => screeen(
-                                            doc["image"], doc["Name"],doc["uid"],widget.uuis.toString())));
+                                          doc["fcm"],
+                                            doc["image"],
+                                            doc["Name"],
+                                            doc["uid"],
+                                            widget.uuis.toString())));
                               },
                               horizontalTitleGap: 20,
                               leading: Stack(children: [
